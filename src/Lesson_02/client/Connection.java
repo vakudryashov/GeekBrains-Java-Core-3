@@ -14,6 +14,7 @@ public class Connection implements Closeable {
     private Controller controller;
     public String nick;
     private String password;
+    public boolean firstLogin = true;
 
     public Connection(Controller controller) {
         this.controller = controller;
