@@ -164,7 +164,8 @@ public class Controller implements Initializable {
 
     public void showLog(){
         for (String line :LogService.getLines(-100)) {
-            if (line != null) publicFrame.appendText(line + "\n");
+            if (line == null) break;
+            publicFrame.appendText(line + "\n");
         }
     }
     public boolean closed(){

@@ -17,7 +17,7 @@ public class LogService {
                 }
             }else{
                 for (int i = 0; i < count; i++) {
-                    result[result.length - 1 - i] = (String) arr[arr.length - 1 - i];
+                    result[count - 1 - i] = (String) arr[arr.length - 1 - i];
                 }
             }
             reader.close();
