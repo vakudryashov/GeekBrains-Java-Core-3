@@ -42,7 +42,8 @@ public class Controller implements Initializable {
             if (isDisconnected) {
                 userInputLabel.setText("Ждём...");
                 userInput.setDisable(true);
-                buttonSend.setDisable(true);
+                if (!buttonSend.getText().equals("Подключиться"))
+                    buttonSend.setDisable(true);
             }else{
                 userInputLabel.setText("Всем:");
                 userInput.setDisable(false);
@@ -90,6 +91,10 @@ public class Controller implements Initializable {
                 Platform.runLater(() -> {
                     userList.setItems(list);
                 });
+            }
+            if (connection.firstLogin){
+                showLog();
+                connection.firstLogin = false;
             }
         }else if(cmd.equals("/addUser")){
             showMessage(msg.equals(connection.nick) ? "Ты вошёл в чат под именем "+msg : msg+" вошёл в чат");
@@ -154,8 +159,15 @@ public class Controller implements Initializable {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM-HH:mm:ss");
         String now = format.format(new Date());
         publicFrame.appendText(now + " " + msg + "\n");
+        LogService.append(now + " " + msg);
     }
 
+    public void showLog(){
+        for (String line :LogService.getLines(-100)) {
+            if (line == null) break;
+            publicFrame.appendText(line + "\n");
+        }
+    }
     public boolean closed(){
         return userCmd.equals("/exit");
     }
