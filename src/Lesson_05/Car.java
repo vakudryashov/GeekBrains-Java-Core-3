@@ -1,7 +1,13 @@
 package Lesson_05;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Car implements Runnable {
     private static int CARS_COUNT;
+    private static Car winner;
+    private static Lock lock = new ReentrantLock();
+
     static {
         CARS_COUNT = 0;
     }
@@ -34,6 +40,12 @@ public class Car implements Runnable {
         for (int i = 0; i < race.getStages().size(); i++) {
             race.getStages().get(i).go(this);
         }
+        lock.lock();
+        if (winner == null){
+            winner = this;
+            System.out.println(name + " - WIN");
+        }
+        lock.unlock();
         MainClass.raceFinalLatch.countDown();
     }
 }
