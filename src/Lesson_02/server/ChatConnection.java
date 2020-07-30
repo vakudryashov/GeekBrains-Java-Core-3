@@ -6,8 +6,7 @@ import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class ChatConnection {
-    private ChatServer server;
+public class ChatConnection implements Runnable{
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
@@ -15,10 +14,13 @@ public class ChatConnection {
     private boolean isOutBufferBusy = false;
     private User user;
 
-    public ChatConnection(ChatServer server, Socket socket) {
-        this.server = server;
+    public ChatConnection(Socket socket) {
         this.socket = socket;
-        new Thread(this::getIOStream).start();
+    }
+
+    @Override
+    public void run() {
+        getIOStream();
     }
 
     private void getIOStream(){
@@ -26,7 +28,7 @@ public class ChatConnection {
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
             getUser();
-            new Thread(this::waitAuth).start();
+            ChatServer.executorService.submit(this::waitAuth);
             while (true) {
                 String msg = in.readUTF();
                 handleMessage(msg);
