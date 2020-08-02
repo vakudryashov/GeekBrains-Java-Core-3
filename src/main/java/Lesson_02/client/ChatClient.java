@@ -1,7 +1,6 @@
 package Lesson_02.client;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,7 +13,8 @@ public class ChatClient extends Application {
         stage.setY(50);
         stage.setWidth(800);
         stage.setHeight(600);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ClientForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ClientForm.fxml"));
+        System.out.println(loader.getLocation());
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setTitle("Клиент чата");

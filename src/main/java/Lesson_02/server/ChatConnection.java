@@ -1,5 +1,8 @@
 package Lesson_02.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -13,6 +16,7 @@ public class ChatConnection implements Runnable{
     private Queue<String> outputBuffer = new LinkedList<>();
     private boolean isOutBufferBusy = false;
     private User user;
+    private static final Logger LOGGER = LogManager.getLogger(ChatConnection.class);
 
     public ChatConnection(Socket socket) {
         this.socket = socket;
@@ -35,7 +39,7 @@ public class ChatConnection implements Runnable{
             }
         }catch(EOFException | SocketException eofException){
         }catch(IOException e){
-            e.printStackTrace();
+            LOGGER.error(e.getStackTrace());
         }finally {
             if (user != null) user.die();
             close(in,out,socket);
@@ -45,6 +49,7 @@ public class ChatConnection implements Runnable{
     private void handleMessage(String msg){
         String[] part = msg.split(" ",2);
         String cmd = part[0];
+        LOGGER.debug("Пришло сообщение: "+msg);
         msg = part.length>1 ? part[1] : "";
         if (cmd.equals("/nickname")){
             String nickname = part[1];
@@ -73,7 +78,7 @@ public class ChatConnection implements Runnable{
                 out.flush();
             }
         }catch(IOException e){
-            e.printStackTrace();
+            LOGGER.error(e.getStackTrace());
         }
         isOutBufferBusy = false;
     }
@@ -86,7 +91,7 @@ public class ChatConnection implements Runnable{
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getStackTrace());
             }
         }while(countDown-- > 0 && !userAuthenticated);
 
@@ -105,7 +110,7 @@ public class ChatConnection implements Runnable{
                 if (item != null) item.close();
             }
         }catch(IOException e){
-            e.printStackTrace();
+            LOGGER.error(e.getStackTrace());
         }
     }
 }
