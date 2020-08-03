@@ -23,7 +23,7 @@ public class Task_2 {
     public void test2(int[] testArr, Object expected){
         if (expected instanceof int[]) Assertions.assertArrayEquals((int[]) expected, lesson06.task2(testArr));
         else Assertions.assertThrows(RuntimeException.class,()->{
-            lesson06.task2(new int[]{1,2,3,5,6});
+            lesson06.task2(testArr);
         });
     }
 }
