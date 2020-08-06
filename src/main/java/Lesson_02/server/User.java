@@ -1,5 +1,8 @@
 package Lesson_02.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -8,6 +11,7 @@ public class User {
     public String nick;
     private String password;
     private final ChatConnection chatConnection;
+    private static final Logger LOGGER = LogManager.getLogger(User.class);
 
     public User(String nick, ChatConnection chatConnection) {
         this.nick = nick;
